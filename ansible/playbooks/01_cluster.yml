@@ -1,0 +1,63 @@
+- name: Install Kubernetes
+  hosts: kubernetes-host
+  tasks:
+
+  - name: Copy cluster config from template
+    template:
+      src: /mnt/hgfs/MyKube/KinD-cluster/cluster-config.yml.j2
+      dest: /tmp/cluster-config.yaml
+      mode: 0644
+
+  - name: Check if cluster already exists
+    shell: "kind get clusters"
+    register: cluster_exists
+    ignore_errors: true
+  
+  - name: Create KinD cluster
+    when: "'mykube' not in cluster_exists.stdout"
+    shell: "kind create cluster --name mykube --config /tmp/cluster-config.yaml"
+
+  - name: Cluster creation complete
+    debug:
+      msg: "Cluster created successfully"
+
+  - name: Create the kube config directory
+    file:
+      path: /home/shasame/.kube
+      state: directory
+      mode: 0755
+
+  # - name: Copy the kube config to the user's home directory
+  #   copy:
+  #     src: /etc/kubernetes/admin.conf
+  #     dest: /home/shasame/.kube/conf
+  #     remote_src: true
+  #     owner: shasame
+  #     group: shasame
+
+  - name: Get the master node IP
+    shell: >
+      kubectl get nodes -o jsonpath="{range .items[*]}{'\n'}{@.metadata.name}:{range @.status.addresses[*]}{@.address}{end}{end}" |
+      grep mykube-control-plane | cut -d ':' -f 2
+    register: master_node_ip
+
+  - name: Register the master node as a host
+    add_host:
+      name: "{{ master_node_ip.stdout }}"
+      groups: master_nodes
+
+  - name: Get IPs of the worker nodes
+    shell: >
+      kubectl get nodes -o jsonpath="{range .items[*]}{'\n'}{@.metadata.name}:{range @.status.addresses[*]}{@.address}{end}{end}" |
+      grep -v mykube-control-plane | cut -d ':' -f 2
+    register: worker_node_ips
+
+  - name: Split the IPs into a list
+    set_fact:
+      worker_node_ips: "{{ worker_node_ips.stdout.split() }}"
+  
+  - name: Register workers a hosts
+    add_host:
+      name: "{{ item }}"
+      groups: worker_nodes
+    with_items: "{{ worker_node_ips }}"

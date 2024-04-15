@@ -1,0 +1,11 @@
+- name: Install Calico
+  hosts: kubernetes-host
+  become: true
+
+  tasks:
+    - name: Install Calico operator and custom resources
+      shell: kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.3/manifests/tigera-operator.yaml
+    
+    - name: Install Calico
+      shell: kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.3/manifests/custom-resources.yaml
+      

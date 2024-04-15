@@ -1,0 +1,73 @@
+- name: Preflight for KinD cluster
+  hosts: kubernetes-host
+  tasks:
+    - name: Check if K8s package key is present
+      stat:
+        path: /usr/share/keyrings/kubernetes-apt-keyring.gpg
+      register: key_file
+
+    - name: Get K8s package key
+      when: key_file.stat.exists == False
+      shell: curl -fsSL curl -fsSL "https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key" | gpg --dearmor -o /usr/share/keyrings/kubernetes-apt-keyring.gpg
+      args:
+        creates: "https://pkgs.k8s.io/core:/stable:/v1.28/deb/"
+
+    - name: Add K8s package repository
+      apt_repository:
+        filename: kubernetes
+        repo: deb [signed-by=/usr/share/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /
+        state: present
+
+    - name: Install necessary packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - kubelet
+        - kubeadm
+        - kubectl
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+    
+    - name: Ensure Docker is running
+      service:
+        name: docker
+        state: started
+
+    - name: Enable kubelet service
+      service:
+        name: kubelet
+        enabled: yes
+        state: started
+    
+    - name: Enabled Containerd CRI Plugin
+      lineinfile:
+        path: /etc/containerd/config.toml
+        regexp: '^disabled_plugins'
+        line: '#disabled_plugins'
+    
+    - name: Restart Containerd
+      service:
+        name: containerd
+        state: restarted
+
+    - name: Enable kubelet service
+      service:
+        name: kubelet
+        enabled: yes
+        state: started
+      
+    - name: Install pip
+      apt:
+        name: python3-pip
+        state: present
+    
+    - name: Install python pre-requisites
+      pip:
+        name:
+          - openshift
+          - kubernetes
+          - pyyaml

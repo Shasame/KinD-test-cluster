@@ -1,0 +1,36 @@
+- name: Deploy OpenSearch, Fluentbit, OpenSearchDashboard
+  hosts: kubernetes-host
+  tasks:
+
+    - name: Create the namespace
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: opensearch
+
+    - name: Add opensearch helm repo
+      command: helm repo add opensearch https://opensearch-project.github.io/helm-charts/
+
+    - name: Update helm repo
+      command: helm repo update
+
+    # - name: Install OpenSearch with helm basi install
+    #   command: helm install opensearch opensearch/opensearch -n opensearch -f /mnt/hgfs/MyKube/OF/openSearch/values-ops.yml
+
+    - name: Update opensearch helm deployment with the new values
+      command: helm upgrade opensearch opensearch/opensearch -n opensearch -f /mnt/hgfs/MyKube/OF/openSearch/values-ops.yml
+
+    - name: Install opensearch Dashboard with helm basic install
+      command: helm install opensearch-dashboard opensearch/opensearch-dashboards -n opensearch -f /mnt/hgfs/MyKube/OF/openSearchDashboard/values-opsdshb.yml
+
+    - name: Add fluent helm repo
+      command: helm repo add fluent https://fluent.github.io/helm-charts
+
+    - name: Update helm repo
+      command: helm repo update
+
+    - name: Install fluent bit with helm
+      command: helm install fluent-bit fluent/fluent-bit -n opensearch -f /mnt/hgfs/MyKube/OF/fluent/values-fluent.yml
