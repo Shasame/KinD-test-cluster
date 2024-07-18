@@ -1,0 +1,34 @@
+- name: Deploy the auth layer
+  hosts: kubernetes-host
+  gather_facts: false
+
+  tasks:
+    # - name: Create Auth namespace
+    #   command: kubectl create namespace auth
+    
+    - name: Create tls-cert secret
+      command: kubectl create secret tls tls-cert --cert=/mnt/hgfs/MyKube/certs/cert.crt --key=/mnt/hgfs/MyKube/certs/cert.key -n auth
+
+    - name: Add openldap repo
+      command: helm repo add helm-openldap https://jp-gouin.github.io/helm-openldap/
+    
+    - name: Add dex repo 
+      command: helm repo add dex https://charts.dexidp.io
+    
+    - name: Add Oauth repo 
+      command: helm repo add oauth2-proxy https://oauth2-proxy.github.io/manifests
+
+    - name: Update Helm repositories
+      command: helm repo update
+
+    - name: Create cert configmap
+      command: kubectl create configmap dex-certs --from-file=tls.crt=/mnt/hgfs/MyKube/certs/cert.crt --from-file=tls.key=/mnt/hgfs/MyKube/certs/cert.key -n auth
+
+    # - name: Install ldap
+    #   command: helm install openldap -n auth helm-openldap/openldap-stack-ha -f /mnt/hgfs/MyKube/authLayer/ldap/value-openldap.yml
+
+    # - name: Install dex
+    #   command: helm install dex -n auth dex/dex -f /mnt/hgfs/MyKube/authLayer/dex/values-dex.yml
+    
+    # - name: Install oauth2-proxy
+    #   command: helm install oauth2-proxy -n auth oauth2-proxy/oauth2-proxy -f /mnt/hgfs/MyKube/authLayer/Oauth/values-oauth.yml

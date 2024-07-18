@@ -1,0 +1,18 @@
+apiVersion : networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: react-app-ingress
+  namespace: react-app
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: avp-back.localhost
+    http:
+      paths:
+        - pathType: Prefix
+          backend:
+            service:
+              name: avp-back-service
+              port:
+                number: 8080
+          path: /

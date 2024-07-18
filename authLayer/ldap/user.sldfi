@@ -1,0 +1,27 @@
+ dn: uid=jdoe,ou=users,dc=ldap,dc=localhost
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+cn: John Doe
+sn: Doe
+uid: jdoe
+uidNumber: 1000
+gidNumber: 1000
+homeDirectory: /home/jdoe
+userPassword: test
+loginShell: /bin/bash
+mail: jdoe@example.com
+
+dn: uid=asmith,ou=users,dc=ldap,dc=localhost
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+cn: Alice Smith
+sn: Smith
+uid: asmith
+uidNumber: 1001
+gidNumber: 1001
+homeDirectory: /home/asmith
+userPassword: test
+loginShell: /bin/bash
+mail: asmith@example.com

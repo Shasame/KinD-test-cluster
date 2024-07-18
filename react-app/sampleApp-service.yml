@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: sample-app-service
-  namespace: sample-app
+  name: avp-back-service
+  namespace: react-app
 spec:
   selector:
-    app: sample-app
+    app: avp-back
   ports:
     - name: http
       protocol: TCP
-      port: 3000
+      port: 8080
   type: ClusterIP
   # ports:
   #   - name: http

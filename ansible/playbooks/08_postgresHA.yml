@@ -1,0 +1,40 @@
+---
+- name: Deploy PostgreSQL HA
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create namespace for PostgreSQL HA
+      k8s:
+        api_version: v1
+        kind: Namespace
+        name: postgres
+    - name: Create namespace for PostgreSQL Operator
+      k8s:
+        api_version: v1
+        kind: Namespace
+        name: postgres-operator
+
+    - name: Aplly secret
+      k8s:
+        state: present
+        definition: "{{ lookup('template', '/mnt/hgfs/MyKube/postgres-HA/postgres-config.yml') }}"
+    - name : Apply configmap
+      k8s:
+        state: present
+        definition: "{{ lookup('template', '/mnt/hgfs/MyKube/postgres-HA/pgpool-conf.yml') }}"
+
+    # - name: Deploy PostgreSQL HA using Helm
+    #   command: helm install postgresql oci://registry-1.docker.io/bitnamicharts/postgresql-ha -n postgres -f /mnt/hgfs/MyKube/postgres-HA/values-postgres.yml
+    - name: Add postgres Operator repo
+      command: 
+        helm repo add postgres-operator-charts https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+    - name: Deploy postgres Operator
+      command: 
+        helm install postgres-operator postgres-operator-charts/postgres-operator -n postgres-operator -f /mnt/hgfs/MyKube/postgres-op/values-pop.yml
+    - name: Add repo for postgres operator UI
+      command: 
+        helm repo add postgres-operator-ui https://opensource.zalando.com/postgres-operator/charts/postgres-operator-ui
+    - name: Deploy postgres operator UI
+      command: 
+        helm install postgres-operator-ui postgres-operator-ui/postgres-operator-ui -n postgres-operator -f /mnt/hgfs/MyKube/postgres-op/values-pop-ui.yml 

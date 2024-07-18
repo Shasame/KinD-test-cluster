@@ -1,0 +1,16 @@
+dn: dc=ldap,dc=localhost
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: Shasame Inc.
+dc: ldap
+
+dn: ou=users,dc=ldap,dc=localhost
+objectClass: top
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,dc=ldap,dc=localhost
+objectClass: top
+objectClass: organizationalUnit
+ou: groups

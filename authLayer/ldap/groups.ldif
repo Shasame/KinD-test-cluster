@@ -1,0 +1,7 @@
+dn: cn=developers,ou=groups,dc=ldap,dc=localhost
+objectClass: posixGroup
+objectClass: top
+cn: developers
+gidNumber: 1000
+memberUid: jdoe
+memberUid: asmith

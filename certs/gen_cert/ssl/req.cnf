@@ -1,0 +1,17 @@
+[req]
+req_extensions = v3_req
+distinguished_name = req_distinguished_name
+ 
+[req_distinguished_name]
+ 
+[ v3_req ]
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+subjectAltName = @alt_names
+ 
+[alt_names]
+DNS.1 = shasame.test
+DNS.2 = dex.shasame.test
+DNS.3 = oauth2-proxy.shasame.test
+DNS.4 = postgres-operator.shasame.test
+DNS.5 = phpldapadmin.shasame.test

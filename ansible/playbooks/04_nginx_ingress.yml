@@ -1,0 +1,7 @@
+- name: Deploy Nginx Ingress
+  hosts: kubernetes-host
+  gather_facts: false
+
+  tasks:
+    - name: Install Nginx Ingress
+      command: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
