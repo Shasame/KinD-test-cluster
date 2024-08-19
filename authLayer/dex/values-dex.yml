@@ -104,7 +104,7 @@ config:
       secret: "ZXhhbXBsZS1hcHAtc2VjcmV0"
     - id: oauth2-client-id
       redirectURIs:
-        - 'http://oauth2.shasame.test/oauth2/callback'
+        - 'http://shasame.test/oauth2/callback'
       name: 'oauth2-client-id'
       secret: "ZXhhbXBsZS1hcHAtc2VjcmV0"
 

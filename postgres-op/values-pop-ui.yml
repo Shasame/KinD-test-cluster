@@ -107,8 +107,8 @@ service:
 ingress:
   enabled: true
   annotations:
-    nginx.ingress.kubernetes.io/auth-url: "http://oauth2.shasame.test/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "http://oauth2.shasame.test/oauth2/start?rd=/redirect/$http_host$escaped_request_uri"
+    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth.svc.cluster.local/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "http://shasame.test/oauth2/start?rd=/redirect/$http_host$escaped_request_uri"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 
   ingressClassName: nginx

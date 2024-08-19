@@ -45,7 +45,7 @@ config:
   configFile: |-
     provider = "oidc"
     oidc_issuer_url = "http://shasame.test/dex"
-    redirect_url = "http://oauth2.shasame.test/oauth2/callback"
+    redirect_url = "http://shasame.test/oauth2/callback"
     client_id = "oauth2-client-id"
     client_secret = "ZXhhbXBsZS1hcHAtc2VjcmV0"
     cookie_secret = "v1ZtTNWolGOwuYhJHrXsTM9T9RYT9WS5"
@@ -182,15 +182,16 @@ serviceAccount:
 ingress:
   enabled: true
   className: nginx
-  annotations: {}
+  annotations: 
+    nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
-    - oauth2.shasame.test
+    - shasame.test
   paths:
-    - path: /
+    - path: /oauth2
       pathType: Prefix
   tls:
     - hosts:
-        - oauth2.shasame.test
+        - shasame.test
       secretName: tls-cert
   # Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
   # Warning! The configuration is dependant on your current k8s API version capabilities (networking.k8s.io/v1)
