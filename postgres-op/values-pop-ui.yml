@@ -41,7 +41,7 @@ resources:
 envs:
   # IMPORTANT: While operator chart and UI chart are independent, this is the interface between
   # UI and operator API. Insert the service name of the operator API here!
-  appUrl: "https://postgres-operator.shasame.test/"
+  appUrl: "https://shasame.test/postgres-operator/"
   operatorApiUrl: "http://postgres-operator:8080"
   operatorClusterNameLabel: "cluster-name"
   resourcesVisible: "False"
@@ -107,22 +107,22 @@ service:
 ingress:
   enabled: true
   annotations:
-    #nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.shasame.test/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "http://oauth2-proxy.shasame.test/oauth2/start?rd=/redirect/$http_host$escaped_request_uri"
+    nginx.ingress.kubernetes.io/auth-url: "http://oauth2.shasame.test/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "http://oauth2.shasame.test/oauth2/start?rd=/redirect/$http_host$escaped_request_uri"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 
   ingressClassName: nginx
   hosts:
-    - host: postgres-operator.shasame.test
-      paths: ["/"]
-      #paths: ["/postgres-operator"]
+    - host: shasame.test
+      #paths: ["/"]
+      paths: ["/postgres-operator(/|$)(.*)"]  # This is the path that will be used to access the UI
         #- path: /postgres-operator
          # backend:
           #  serviceName: "postgres-operator"
            # servicePort: 8080
   tls:
     - hosts:
-        - postgres-operator.shasame.test
+        - shasame.test
       secretName: tls-cert
 
 

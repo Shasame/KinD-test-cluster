@@ -44,8 +44,8 @@ config:
 
   configFile: |-
     provider = "oidc"
-    oidc_issuer_url = "http://dex.shasame.test/dex"
-    redirect_url = "http://oauth2-proxy.shasame.test/oauth2/callback"
+    oidc_issuer_url = "http://shasame.test/dex"
+    redirect_url = "http://oauth2.shasame.test/oauth2/callback"
     client_id = "oauth2-client-id"
     client_secret = "ZXhhbXBsZS1hcHAtc2VjcmV0"
     cookie_secret = "v1ZtTNWolGOwuYhJHrXsTM9T9RYT9WS5"
@@ -54,7 +54,7 @@ config:
     cookie_secure = true
     cookie_samesite = "lax"
     upstreams = ["http://localhost/redirect/"]
-    whitelist_domains = [ "dex.shasame.test", "postgres-operator.shasame.test", "localhost", "oauth2-proxy.shasme.test" ]
+    whitelist_domains = [ "shasame.test", "localhost" ]
     cookie_csrf_per_request = true
     cookie_csrf_expire = "1h"
   #  upstreams = [ "http://postgres-operator.localhost/", "http://sample-app.localhost/sampleApp" ]
@@ -105,7 +105,7 @@ image:
 
 extraArgs: [
   "--email-domain=*",
-  "--cookie-domain=.shasame.test",
+  "--cookie-domain=shasame.test",
 ]
 extraEnv: []
 
@@ -184,10 +184,13 @@ ingress:
   className: nginx
   annotations: {}
   hosts:
-    - oauth2-proxy.shasame.test
+    - oauth2.shasame.test
+  paths:
+    - path: /
+      pathType: Prefix
   tls:
     - hosts:
-        - oauth2-proxy.shasame.test
+        - oauth2.shasame.test
       secretName: tls-cert
   # Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
   # Warning! The configuration is dependant on your current k8s API version capabilities (networking.k8s.io/v1)

@@ -57,7 +57,7 @@ configSecret:
 # -- Application configuration.
 # See the [official documentation](https://dexidp.io/docs/).
 config:
-  issuer: "http://dex.shasame.test/dex"
+  issuer: "http://shasame.test/dex"
   ClientID: kubernetes
   storage:
     type: kubernetes
@@ -74,7 +74,7 @@ config:
       name: LDAP
       config:
         #host: openldap:1389 ### TEST WITH NO CUSTOM DNS ###
-        host: openldap.auth.svc.cluster.local:1389
+        host: openldap:1389
         insecureNoSSL: true
         insecureSkipVerify: true
         bindDN: cn=admin,dc=ldap,dc=localhost
@@ -104,7 +104,7 @@ config:
       secret: "ZXhhbXBsZS1hcHAtc2VjcmV0"
     - id: oauth2-client-id
       redirectURIs:
-        - 'http://oauth2-proxy.shasame.test/oauth2/callback'
+        - 'http://oauth2.shasame.test/oauth2/callback'
       name: 'oauth2-client-id'
       secret: "ZXhhbXBsZS1hcHAtc2VjcmV0"
 
@@ -254,9 +254,9 @@ ingress:
   # -- Ingress host configuration.
   # @default -- See [values.yaml](values.yaml).
   hosts:
-    - host: dex.shasame.test
+    - host: shasame.test
       paths:
-        - path: /
+        - path: /dex
           pathType: Prefix
 
   # -- Ingress TLS configuration.
@@ -264,7 +264,7 @@ ingress:
   tls: 
    - secretName: tls-cert
      hosts:
-       - dex.shasame.test
+       - shasame.test
 
 serviceMonitor:
   # -- Enable Prometheus ServiceMonitor.
