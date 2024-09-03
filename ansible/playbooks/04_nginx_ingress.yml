@@ -5,3 +5,6 @@
   tasks:
     - name: Install Nginx Ingress
       command: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+    
+    - name: Add label to control plane
+      command: kubectl label nodes mykube-control-plane ingress-ready=true

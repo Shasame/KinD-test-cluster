@@ -8,6 +8,14 @@ nodes:
         nodeRegistration:
           kubeletExtraArgs:
             node-labels: "ingress-ready=true"
+        kind: ClusterConfiguration
+        apiServer:
+          extraArgs:
+            oidc-issuer-url: "https://shasame.test/dex"
+            oidc-client-id: "oauth2-client-id"
+            oidc-username-claim: "email"
+            oidc-groups-claim: "groups"
+          # oidc-ca-file: "/etc/kubernetes/pki/ca.crt"
     extraPortMappings:
       - containerPort: 80
         hostPort: 80

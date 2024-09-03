@@ -37,7 +37,7 @@ hostAliases: []
 
 https:
   # -- Enable the HTTPS endpoint.
-  enabled: false
+  enabled: true
 
 grpc:
   # -- Enable the gRPC endpoint.
@@ -57,14 +57,14 @@ configSecret:
 # -- Application configuration.
 # See the [official documentation](https://dexidp.io/docs/).
 config:
-  issuer: "http://shasame.test/dex"
+  issuer: "https://shasame.test/dex"
   ClientID: kubernetes
   storage:
     type: kubernetes
     config:
       inCluster: true
   web:
-    https: 0.0.0.0:5554
+    https: 0.0.0.0:443
     tlsCert: /etc/dex/tls/tls.crt
     tlsKey: /etc/dex/tls/tls.key
 
@@ -88,10 +88,10 @@ config:
           nameAttr: cn
         groupSearch:
           baseDN: ou=groups,dc=ldap,dc=localhost
-          filter: "(objectClass=myGroup)"
+          filter: "(objectClass=posixGroup)"
           userMatchers:
-            - userAttr: DN
-          groupAttr: member
+            - userAttr: uid
+          groupAttr: memberUid
           nameAttr: cn
   oauth2:
     skipApprovalScreen: true
@@ -227,7 +227,7 @@ service:
 
     https:
       # -- HTTPS service port
-      port: 5554
+      port: 443
 
       # -- (int) HTTPS node port (when applicable)
       nodePort:

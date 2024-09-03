@@ -69,7 +69,7 @@ initSchema:
   image: 
     repository: debian
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     pullSecrets: []
 
 extraLabels: {}
@@ -162,6 +162,17 @@ customLdifFiles:
     dn: ou=users,dc=ldap,dc=localhost
     objectClass: top
     objectClass: organizationalUnit
+
+    dn: ou=groups,dc=ldap,dc=localhost
+    objectClass: top
+    objectClass: organizationalUnit
+
+    dn: cn=developers,ou=groups,dc=ldap,dc=localhost
+    objectClass: posixGroup
+    objectClass: top
+    cn: developers
+    gidnumber: 501
+
   02-default-user.ldif: |-
     dn: uid=jdoe,ou=users,dc=ldap,dc=localhost
     objectClass: inetOrgPerson
@@ -191,13 +202,10 @@ customLdifFiles:
     loginShell: /bin/bash
     mail: asmith@example.com
   03-groups.ldif: |-
-    dn: cn=developers,ou=group,dc=ldap,dc=localhost
-    objectClass: posixGroup
-    objectClass: top
-    cn: developers
-    gidNumber: 1000
+    dn: cn=developers,ou=groups,dc=ldap,dc=localhost
+    changetype: modify
+    add: memberUid
     memberUid: jdoe
-    memberUid: asmith
 
 # Custom openldap ACLs
 # If not defined, the following default ACLs are applied:

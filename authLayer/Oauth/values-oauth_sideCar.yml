@@ -44,7 +44,7 @@ config:
 
   configFile: |-
     provider = "oidc"
-    oidc_issuer_url = "http://shasame.test/dex"
+    oidc_issuer_url = "https://shasame.test/dex"
     redirect_url = "http://shasame.test/oauth2/callback"
     client_id = "oauth2-client-id"
     client_secret = "ZXhhbXBsZS1hcHAtc2VjcmV0"
@@ -57,6 +57,14 @@ config:
     whitelist_domains = [ "shasame.test", "localhost" ]
     cookie_csrf_per_request = true
     cookie_csrf_expire = "1h"
+    pass_access_token = true
+    pass_authorization_header = true
+    pass_user_headers = true
+    pass_host_header = true
+    set_authorization_header = true
+    set_xauthrequest = true
+
+  # oidc_ca_file = "/etc/ssl/certs/dex-ca.crt"
   #  upstreams = [ "http://postgres-operator.localhost/", "http://sample-app.localhost/sampleApp" ]
 
   #  upstreams = [ "http://postgres-operator.localhost" ]
@@ -184,6 +192,7 @@ ingress:
   className: nginx
   annotations: 
     nginx.ingress.kubernetes.io/rewrite-target: /
+
   hosts:
     - shasame.test
   paths:
@@ -225,13 +234,22 @@ extraVolumes: [
   {
     configMap: {name: "oauth2-proxy-nginx-configuration"},
     name: "nginx"
+  },
+  {
+    name: "dex-ca-cert",
+    secret: {secretName: "dex-ca-cert"}
   }
 ]
   # - name: ca-bundle-cert
   #   secret:
   #     secretName: <secret-name>
 
-extraVolumeMounts: []
+extraVolumeMounts: [
+  {
+    mountPath: "/etc/ssl/certs/",
+    name: "dex-ca-cert",
+    readOnly: true
+  }]
   # - mountPath: /etc/ssl/certs/
   #   name: ca-bundle-cert
 

@@ -1,0 +1,19 @@
+- name : Deploy kubernetes dashboard
+  hosts: kubernetes-host
+  gather_facts: false
+
+  tasks:
+    - name: Create dashboard namespace
+      command: kubectl create namespace kubernetes-dashboard
+
+    - name: Create tls-cert secret
+      command: kubectl create secret tls tls-cert --cert=/mnt/hgfs/MyKube/certs/cert.crt --key=/mnt/hgfs/MyKube/certs/cert.key -n kubernetes-dashboard
+
+    - name: Deploy dashboard
+      command: helm install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard -f /mnt/hgfs/MyKube/dashboard/values.yaml -n kubernetes-dashboard
+
+    - name: Create Role
+      command: kubectl apply -f /mnt/hgfs/MyKube/dashboard/roles/dsb-role.yml
+
+    - name: Create Role Binding
+      command: kubectl apply -f /mnt/hgfs/MyKube/dashboard/roles/dsb-roleBinding.yml
