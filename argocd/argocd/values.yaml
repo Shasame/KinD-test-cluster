@@ -1,0 +1,32 @@
+argo-cd:
+  configs:
+    cm:
+      admin.enabled: "true"
+      application.instanceLabelKey: argocd.argoproj.io/instance
+    secret:
+      argocdServerAdminPassword: "$2y$10$lBAfFJoOzR4BG87xKKIdLu3Ry6EdpoAZLX9aftt3ZpPtCngWx.3Sa"
+    params:
+      server.insecure: "true"
+  server:
+    service:
+      type: ClusterIP
+    ingress:
+      enabled: true
+      hostname: shasame.test
+      path: /argocd
+      pathType: Prefix
+      tls: 
+        - hosts:
+            - shasame.test
+          secretName: argocd-server-tls
+      ingressClassName: nginx
+      annotations: 
+        nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth.svc.cluster.local/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: "http://shasame.test/oauth2/start?rd=/redirect/$http_host$escaped_request_uri"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      service:
+        name: argocd-server
+        port: 443
+      config:
+        application.instanceLabelKey: argocd.argoproj.io/instance
