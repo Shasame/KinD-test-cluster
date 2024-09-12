@@ -1217,20 +1217,20 @@ server:
 
   # -- The number of server pods to run
   replicas: 1
-  additionalApplications:
-    - name: argocd
-      namespace: argocd
-      project: default
-      source:
-        repoURL: https://github.com/Shasame/KinD-test-cluster.git
-        targetRevision: path
-        path: argocd/argocd/values-argocd.yml
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: argocd
-      syncPolicy:
-        prune: true
-        selfHeal: true
+  # additionalApplications:
+  #   - name: argocd
+  #     namespace: argocd
+  #     project: default
+  #     source:
+  #       repoURL: https://github.com/Shasame/KinD-test-cluster.git
+  #       targetRevision: path
+  #       path: argocd/argocd/values-argocd.yml
+  #     destination:
+  #       server: https://kubernetes.default.svc
+  #       namespace: argocd
+  #     syncPolicy:
+  #       prune: true
+  #       selfHeal: true
 
   ## Argo CD server Horizontal Pod Autoscaler
   autoscaling:
@@ -1694,8 +1694,8 @@ server:
     # -- Additional ingress annotations
     ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#option-1-ssl-passthrough
     annotations: 
-      nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth.svc.cluster.local/oauth2/auth"
-      nginx.ingress.kubernetes.io/auth-signin: "http://shasame.test/oauth2/start?rd=/redirect/$http_host$escaped_request_uri"
+      #nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth.svc.cluster.local/oauth2/auth"
+      #nginx.ingress.kubernetes.io/auth-signin: "http://shasame.test/oauth2/start?rd=/redirect/$http_host$escaped_request_uri"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
 
