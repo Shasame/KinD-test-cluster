@@ -171,7 +171,7 @@ configs:
     # -- Directory path that contains additional static assets
     server.staticassets: /shared/app
     # -- Disable Argo CD RBAC for user authentication
-    server.disable.auth: false
+    server.disable.auth: true #TO BE CHANGED BACK TO FALSE
     # -- Enable GZIP compression
     server.enable.gzip: true
     # -- Set X-Frame-Options header in HTTP responses to value. To disable, set to "".
@@ -1698,7 +1698,7 @@ server:
       nginx.ingress.kubernetes.io/auth-signin: "http://shasame.test/oauth2/start?rd=/redirect/$http_host$escaped_request_uri"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 
 
     # -- Defines which ingress controller will implement the resource
