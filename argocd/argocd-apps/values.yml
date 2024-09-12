@@ -16,9 +16,9 @@ applications:
     syncPolicy:
       syncOptions:
       - CreateNamespace=true
-      automated:
-        selfHeal: true
-        prune: true
+      # automated:
+      #   selfHeal: true
+      #   prune: true
   argocd-apps:
     namespace: argocd
     project: default
@@ -42,7 +42,7 @@ applicationSets:
         repoURL: https://github.com/Shasame/KinD-test-cluster.git
         revision: path
         directories:
-        - path: argocd/apps
+        - path: argocd/apps/*
     template:
       metadata:
         name: '{{path.basename}}'
