@@ -1,0 +1,8 @@
+nginx:
+  image: nginx:latest
+  replicas: 1
+  port: 80
+  resources:
+    requests:
+        cpu: 500m
+        memory: 512Mi

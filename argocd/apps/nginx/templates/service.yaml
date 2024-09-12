@@ -1,0 +1,16 @@
+---
+{{- with .Values.nginx }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: nginx
+    namespace: {{ $.Release.Namespace }}
+spec:
+    selector:
+        app.kubernetes.io/instance: nginx
+        app.kubernetes.io/name: nginx
+    ports:
+        -   protocol: TCP
+            port: {{ .port }}
+{{- end }}
