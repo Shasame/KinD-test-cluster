@@ -1224,7 +1224,7 @@ server:
       source:
         repoURL: https://github.com/Shasame/KinD-test-cluster.git
         targetRevision: path
-        path: argocd/app/values-argocd.yaml
+        path: argocd/argocd/values-argocd.yml
       destination:
         server: https://kubernetes.default.svc
         namespace: argocd
