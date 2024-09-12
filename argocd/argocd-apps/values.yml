@@ -35,33 +35,36 @@ applications:
       automated:
         selfHeal: true
         prune: true
-applicationSets:
-  apps:
-    generators:
-    - git:
-        repoURL: https://github.com/Shasame/KinD-test-cluster.git
-        revision: path
-        directories:
-        - path: argocd/apps/*
-    template:
-      metadata:
-        name: '{{path.basename}}'
-        labels:
-          project: 'default' 
-        annotations: {}
-      spec:
-        project: default
-        source:
-          repoURL: https://github.com/Shasame/KinD-test-cluster.git
-          targetRevision: path
-          path: '{{path}}'
-        destination:
-          namespace: '{{path.basename}}'
-          server: https://kubernetes.default.svc
-        syncPolicy:
-          automated:
-            prune: false
-            selfHeal: false
-          syncOptions:
-          - CreateNamespace=true
-          - FailOnSharedResource=true
+  argocd-appprojects:
+    namespace: argocd
+    destination:
+      namespace: argocd
+      server: https://kubernetes.default.svc
+    project: argocd
+    source:
+      repoURL: https://github.com/Shasame/KinD-test-cluster.git
+      path: argocd/apps
+      targetRevision: path
+      directory:
+        recurse: true
+        jsonnet: {}
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+projects:
+  argocd:
+    namespace: argocd
+    additionalLabels: {}
+    additionalAnnotations: {}
+    description: argocd project
+    sourceRepos:
+    - '*'
+    destinations:
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+    clusterResourceWhitelist: 
+    - group: '*'
+      kind: '*'
+    orphanedResources: 
+      warn: false
