@@ -1,15 +1,16 @@
-
+## GOATESQUE https://medium.com/devopsturkiye/self-managed-argo-cd-app-of-everything-a226eb100cf0 ##
 applications:
   argocd:
     namespace: argocd
     project: default
     source:
       repoURL: https://github.com/Shasame/KinD-test-cluster.git
-      path: argocd/argocd
+      path: argocd/argocd/argo-cd
       targetRevision: path
       helm:
         valueFiles:
-        - values-argocd.yaml
+        - values.yaml
+        - ../values-argocd.yaml
     destination:
       namespace: argocd
       server: https://kubernetes.default.svc
