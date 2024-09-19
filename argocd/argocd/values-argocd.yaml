@@ -1706,7 +1706,7 @@ server:
     # -- Argo CD server hostname
     # @default -- `""` (defaults to global.domain)
     hostname: shasame.test
-    breaking_test.Broker
+    breaking_test: BreakingTest
 
     # -- The path to Argo CD server
     path: /argocd
