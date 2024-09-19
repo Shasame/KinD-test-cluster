@@ -44,7 +44,7 @@ applications:
     project: argocd
     source:
       repoURL: https://github.com/Shasame/KinD-test-cluster.git
-      path: argocd/apps
+      path: argocd/projects
       targetRevision: path
       directory:
         recurse: true
