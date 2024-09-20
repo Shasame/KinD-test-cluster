@@ -1694,8 +1694,8 @@ server:
     # -- Additional ingress annotations
     ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#option-1-ssl-passthrough
     annotations: 
-      #nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth.svc.cluster.local/oauth2/auth"
-      #nginx.ingress.kubernetes.io/auth-signin: "http://shasame.test/oauth2/start?rd=/redirect/$http_host$escaped_request_uri"
+      nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth.svc.cluster.local/oauth2/auth"
+      nginx.ingress.kubernetes.io/auth-signin: "http://shasame.test/oauth2/start?rd=/redirect/$http_host$escaped_request_uri"
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       #nginx.ingress.kubernetes.io/ssl-passthrough: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
@@ -1708,7 +1708,7 @@ server:
     hostname: argocd.shasame.test
 
     # -- The path to Argo CD server
-    path: /argocd  
+    path: /
 
     # -- Ingress path type. One of `Exact`, `Prefix` or `ImplementationSpecific`
     pathType: Prefix
